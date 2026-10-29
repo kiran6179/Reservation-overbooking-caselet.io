@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Interactive Reservation Roulette problem-based learning activity for IHM Shri Shakti hospitality students.">
+<meta name="theme-color" content="#5146e5">
+<title>Reservation Roulette | IHM Shri Shakti</title>
+<link rel="stylesheet" href="style.css"></head><body>
+<header><div class="logo"><img src="ihm-shri-shakti-logo.png" alt="IHM Shri Shakti logo"></div>
+<div><h1>Reservation Roulette</h1><p>Problem-Based Learning · Foundation Course in Rooms Division · Units 1–3 · Created by Dr. Kiran Mayi Audina</p></div></header>
+<div class="w">
+<nav id="nav"></nav>
+
+<section class="sec" id="s0"><div class="card"><h2>1 · The Problem</h2>
+<p><b>Friday, Diwali festival week.</b> You are the Reservations Manager of <b>Hotel Shri Shakti Grand</b>, a <b>100-room medium hotel</b> (Unit 2: medium = 26–100 lettable rooms). The General Manager asks: <i>“How many rooms beyond 100 should we sell tonight?”</i></p>
+<p>Some guests hold <b>guaranteed reservations</b> (deposit, credit card, company, airline, travel agent). Others hold <b>non-guaranteed (6 PM) reservations</b>. Guaranteed no-shows are charged, so the hotel keeps one day’s room charge; non-guaranteed no-shows pay nothing. If more guests arrive than rooms, someone is <b>walked</b>, which costs money and harms reputation at the most critical stage: Arrival.</p>
+<div class="chips"><span class="hot">1 Pre-Arrival</span><span class="hot">2 Arrival</span><span>3 Stay</span><span>4 Departure</span><span>5 Post Departure</span></div>
+<p class="ref">Unit 3 §3.2 Guest cycle · §3.3 Types of reservation · Unit 1 §1.5.1 Reservation section, Reception, Guest Relations, Night Audit · Unit 2 §2.4 Rack rate</p>
+<h3>Your mission</h3><ol><li><b>Predict</b> a policy before touching the model.</li><li><b>Investigate</b> using the controls and record observations.</li><li><b>Compare</b> two scenarios.</li><li><b>Justify and recommend</b> to the GM.</li><li><b>Reflect</b> on what the model leaves out.</li></ol>
+<button class="btn" onclick="UI.go(1)">Start: make your prediction →</button></div></section>
+
+<section class="sec" id="s1"><div class="card"><h2>2 · Predict</h2><p>Current baseline: ADR ₹5,000, 60% guaranteed, 15% of non-guaranteed guests do not show, walk cost ₹8,000 per guest.</p>
+<label>How many extra rooms (overbooking) will earn the most? <select id="pred" data-k="pred"><option value="">Choose…</option><option>0</option><option>2</option><option>5</option><option>8</option><option>12</option><option>20</option></select></label>
+<label>At that level, how risky is walking at least one guest? <select id="risk" data-k="risk"><option value="">Choose…</option><option value="l">Low (under 25% of nights)</option><option value="m">Medium (25–60%)</option><option value="h">High (over 60%)</option></select></label>
+<label>Why? (use unit terms: guaranteed, no-show, retention, walked guest)<textarea data-k="predwhy"></textarea></label>
+<button class="btn" onclick="UI.go(2)">Test my prediction →</button></div></section>
+
+<section class="sec" id="s2"><div class="card"><h2>3 · Investigate</h2><div class="msg" id="predmsg"></div>
+<div class="grid"><div>
+<label>Overbooking: <b id="vo"></b> extra rooms<input type="range" id="over" min="0" max="25" value="5"></label>
+<label>Guaranteed share of bookings: <b id="vg"></b>%<input type="range" id="gs" min="20" max="95" step="5" value="60"></label>
+<label>Average daily rate (ADR): <b id="va"></b><input type="range" id="adr" min="3000" max="9000" step="250" value="5000"></label></div><div>
+<label>Cost per walked guest: <b id="vc"></b><input type="range" id="comp" min="2000" max="20000" step="500" value="8000"></label>
+<label>No-show rate, non-guaranteed: <b id="vn"></b>%<input type="range" id="nsn" min="5" max="35" value="15"></label>
+<p class="ref">Fixed: 100 rooms · 4% guaranteed no-show · guaranteed no-shows pay one night’s rate · walk-ins fill leftover rooms.</p>
+<button class="btn x" onclick="UI.reseed()">Re-run simulated nights</button></div></div></div>
+<div class="kpis" id="kpis"></div>
+<div class="card"><h3>Arrivals on 1,500 simulated nights</h3><canvas id="c1"></canvas><p class="ref">Red bars: nights when arrivals exceed 100 rooms, so guests are walked.</p></div>
+<div class="card"><h3>Net contribution by overbooking level</h3><canvas id="c2"></canvas><p class="ref">Net = room revenue + retained no-show charges − walk costs. ★ marks the best level for the current settings; ● is your setting.</p></div>
+<div class="card"><h3>Investigation notebook</h3><label>What do you notice? <input type="text" id="note" placeholder="e.g. when I raised guaranteed share, the best level moved…"></label>
+<button class="btn g" onclick="NB.add()">＋ Record this observation</button><button class="btn x" onclick="NB.exportTxt()">Download notebook (.txt)</button>
+<div class="tbl"><table id="nbt"></table></div></div></section>
+
+<section class="sec" id="s3"><div class="card"><h2>4 · Compare</h2><p>Set sliders in Investigate, then save the current settings as Scenario A, change them, and save as Scenario B. Try: guaranteed share 30% vs 90%.</p>
+<button class="btn o" onclick="CMP.save('A')">Save current as A</button><button class="btn g" onclick="CMP.save('B')">Save current as B</button>
+<div class="tbl"><table id="cmp"></table></div>
+<label>Which differences matter most, and why does the best overbooking level shift?<textarea data-k="cmpwhy"></textarea></label></div></section>
+
+<section class="sec" id="s4"><div class="card"><h2>5 · Justify &amp; Recommend</h2>
+<label>Your recommendation to the GM<select id="rec" data-k="rec"><option value="">Choose…</option><option>Conservative: 0–3 extra rooms</option><option>Balanced: 4–8 extra rooms</option><option>Aggressive: 9 or more extra rooms</option><option>Dynamic: vary by guaranteed share and cost</option></select></label>
+<label>Justify with evidence from your notebook<textarea id="just" data-k="just" style="min-height:110px"></textarea></label>
+<button class="btn" onclick="REC.check()">Check my argument</button><div id="chk"></div></div></section>
+
+<section class="sec" id="s5"><div class="card"><h2>6 · Reflect</h2>
+<label>1. The model counts rupees only. Which guest-cycle stage is damaged when a guest is walked, and which front office section should handle the recovery? <span class="ref">(Unit 3 §3.2.2; Unit 1 §1.5.1)</span><textarea data-k="r1"></textarea></label>
+<label>2. Why does a higher share of guaranteed reservations change the best overbooking level? <span class="ref">(Unit 3 §3.3.1–3.3.2)</span><textarea data-k="r2"></textarea></label>
+<label>3. How would your policy differ for a small hotel (25 rooms or fewer) or a transit/airport hotel? <span class="ref">(Unit 2 §1.1.1, §2.1.3)</span><textarea data-k="r3"></textarea></label>
+<label>4. What did your prediction miss, and what would you do differently next time?<textarea data-k="r4"></textarea></label>
+<button class="btn g" onclick="NB.exportTxt()">Download my full notebook (.txt)</button></div></section>
+</div>
+<footer>Created by Dr. Kiran Mayi Audina · IHM Shri Shakti · Works offline · Your notes stay in this browser</footer>
+
+<script src="script.js" defer></script></body></html>
